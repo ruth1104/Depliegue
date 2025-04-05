@@ -1,0 +1,40 @@
+{% extends "base.html" %} 
+{% block content %}
+
+<table class="w3-table-all w3-hoverable">
+    <h1>Entrada y Salida de Equipo de Instructores</h1>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Fecha Entrada</th>
+      <th>Fecha Salida</th>
+      <th>Instructor</th>
+      <th>Celador</th>
+      <th>Codigo de equipo</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for recordsIn in data %}
+    <tr>
+      <td>{{ recordsIn.idRecordsIn }}</td>
+      <td>{{ recordsIn.dataEntry}}</td>
+      <td>{{ recordsIn.dataExit}}</td>
+      <td>{{ recordsIn.instructor.nameInstructor}}</td>
+      <td>{{ recordsIn.wachiman.nameWachiman }}</td>
+      <td>{{ recordsIn.equipment.codeEquipment }}</td>
+      
+      <td>
+        <div class="d-flex justify-content-between">
+          <a href="{{ url_for('recordsIn.edit', id=recordsIn.idRecordsIn) }}" class="btn btn-sm btn-primary">Editar</a>
+          <a href="{{ url_for('recordsIn.delete', id=recordsIn.idRecordsIn) }}" class="btn btn-sm btn-danger"> Eliminar</a>
+          <a href="{{ url_for('recordsIn.salida', id=recordsIn.idRecordsIn) }}" class="btn btn-sm btn"> Salida</a>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<a href="{{ url_for('recordsIn.add') }}" class="btn btn-primary">Registrar Equipo Instructor</a>
+<a href="{{ url_for('record.add') }}" class="btn btn-primary">Registrar Equipo Aprendiz</a>
+{% endblock %}

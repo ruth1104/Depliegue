@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Editar Celador</title>
+</head>
+<body>
+    {% include 'menu.html'%}
+    <h1>Editar Celador</h1>
+    <form action="{{ url_for('wachiman.edit', id=wachiman.idWachiman) }}" method="post">
+        <label for="nameWachiman">Nombre: </label>
+        <input type="text" name="nameWachiman" value="{{ wachiman.nameWachiman}}" placeholder="Celador"  required>
+
+        <label for="documentCaretaker">Documento: </label>
+        <input type="text" name="documentWachiman" value="{{ wachiman.documentWachiman}}" placeholder="Celador"  required>
+
+        <button type="submit">Editar</button>
+    </form>
+</body>
+</html>

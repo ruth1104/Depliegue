@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+    {% block content %}
+    <table  class="w3-table-all w3-hoverable">
+        <h1>Lista de Equipos</h1>
+        <tr>
+            <th>ID</th>
+            <th>Marca</th>
+            <th>Codigo</th>
+            <th>Accesorios</th>
+            <th>Aprendiz</th>
+            <th>Instructor</th>
+            <th>Accion</th>
+            
+        </tr>
+        {% for equipment in data %}
+            <tr class="w3-hover-blue">
+                <td>{{ equipment.idEquipment }}</td>
+                <td>{{ equipment.brandEquipment }}</td>
+                <td>{{ equipment.codeEquipment }}</td>
+                <td>{{ equipment.accassoriesEquipment }}</td>
+                <td>{{ equipment.apprentice.nameApprentice}}</td>
+                <td>{{ equipment.instructor.nameInstructor}}</td>
+                <td>
+                    <a href="{{ url_for('equipment.edit', id=equipment.idEquipment) }}">Editar</a>
+                    <a href="{{ url_for('equipment.delete', id=equipment.idEquipment) }}">Eliminar</a>
+                    <!-- Agrega aquí el enlace para eliminar -->
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    <a href="{{ url_for('equipment.add') }}" class="btn btn-sm btn-succes">Agregar Equipo</a>
+    {% endblock %}
+</body>
+</html>

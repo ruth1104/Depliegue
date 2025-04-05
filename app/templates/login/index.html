@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <table class="w3-table-all w3-hoverable">
+        <h1>Lista de Usuarios</h1>
+        <tr>
+            <th>ID</th>
+            <th>Usuario</th>
+            <th>Contrase</th>
+            <th>Rol</th>
+            
+        </tr>
+        {% for user in users %}
+            <tr class="w3-hover-blue">
+                <td>{{ user.idUser }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.password }}</td>
+                <td>{{ user.rol }}</td>
+                
+                <td>
+                    <a href="{{ url_for('auth.edit', id=user.idUser) }}">Editar</a>
+                    <a href="{{ url_for('auth.delete', id=user.idUser) }}">Eliminar</a>
+                    <!-- Agrega aquí el enlace para eliminar -->
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    <a href="{{ url_for('auth.add') }}" class="btn btn-sm btn-succes">Agregar Usuario</a>
+    {% endblock %}
+</body>
+</html>

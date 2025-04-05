@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Editar Usuario</title>
+</head>
+<body>
+    {% include 'menu.html'%}
+    <h1>Editar Usuario</h1>
+    <form action="{{ url_for('auth.edit', id=user.idUser) }}" method="post" >
+        
+        <label for="username" >Usuario</label>
+        <input type="text" name="username" value="{{ user.username}}"required>
+
+        <label for="password" >Contraseña:</label>
+        <input type="password" name="password" value="{{ user.password}}" required>
+
+        <label for="rol">Rol:</label>
+            <select id="rol" name="rol"  required>
+                    <option value="Aprendiz">Aprendiz</option>
+                    <option value="Celador">Celador</option>
+                    <option value="Instructor">Instructor</option>
+            </select>
+        </div>
+
+    <button type="submit">Editar Usuario</button>
+</form>
+</body>
+</html>

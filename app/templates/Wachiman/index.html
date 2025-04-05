@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+    
+    <table class="w3-table-all w3-hoverable">
+        <h1>Lista de Celador</h1>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Documento</th>
+            <th>Accion</th>
+            
+        </tr>
+        {% for wachiman in data %}
+            <tr class="w3-hover-blue">
+                <td>{{ wachiman.idWachiman }}</td>
+                <td>{{ wachiman.nameWachiman }}</td>
+                <td>{{ wachiman.documentWachiman }}</td>
+                <td>
+                    <a href="{{ url_for('wachiman.edit', id=wachiman.idWachiman) }}">Editar</a>
+                    <a href="{{ url_for('wachiman.delete', id=wachiman.idWachiman) }}">Eliminar</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>    
+    <a href="{{ url_for('wachiman.add') }}" class=class="btn btn-sm btn-succes">Agregar Celador</a>
+    {% endblock %}
+</body>
+</html>

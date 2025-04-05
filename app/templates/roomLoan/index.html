@@ -1,0 +1,38 @@
+{% extends "base.html" %} 
+{% block content %}
+
+<table class="w3-table-all w3-hoverable">
+    <h1>Lista de Préstamos</h1>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Fecha de entrega</th>
+      <th>Fecha de Devolucion</th>
+      <th>Instructor</th>
+      <th>Celador</th>
+      <th>Salon</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for roomLoan in roomLoan %}
+    <tr>
+      <td>{{ roomLoan.idRoomLoan }}</td>
+      <td>{{ roomLoan.date}}</td>
+      <td>{{ roomLoan.returnDate}}</td>
+      <td>{{ roomLoan.instructor.nameInstructor}}</td>
+      <td>{{ roomLoan.wachiman.nameWachiman }}</td>
+      <td>{{ roomLoan.room.nameRoom }}</td>
+      <td>
+        <div class="d-flex justify-content-between">
+          <a href="{{ url_for('roomLoan.edit', id=roomLoan.idRoomLoan) }}" class="btn btn-sm btn-primary">Editar</a>
+          <a href="{{ url_for('roomLoan.delete', id=roomLoan.idRoomLoan) }}" class="btn btn-sm btn-danger"> Eliminar</a>
+          <a href="{{ url_for('roomLoan.devolver', id=roomLoan.idRoomLoan) }}" class="btn btn-sm btn-blue"> Devolver</a>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<a href="{{ url_for('roomLoan.add') }}" class="btn btn-primary">Prestamo Salon</a>
+{% endblock %}

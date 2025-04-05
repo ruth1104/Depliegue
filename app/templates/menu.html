@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tienda Responsive</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <style>
+        .product-card {
+            margin: 16px;
+            padding: 16px;
+            text-align: center;
+        }
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    
+
+<!-- Menú Responsive -->
+<div class="w3-top">
+    <div class="w3-bar w3-white w3-padding w3-card">
+        <a href="#" class="w3-bar-item w3-button w3-wide">Mi Sistema</a>
+        
+            <img src="static/img/foto.png" class="w3-circle w3-display-topright" style="width:7%">
+          
+    
+        <!-- Botón de hamburguesa para móviles -->
+        <a href="javascript:void(0)" 
+           class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium"
+           onclick="w3_open()">&#9776;</a>
+        
+        <!-- Elementos del menú para pantallas grandes -->
+        <div class="w3-hide-small">
+
+        
+            <!-- Este enlace se muestra solo si el rol es Celador -->
+        {% if current_user.is_authenticated and current_user.rol == "Celador" %}
+            <a href="{{ url_for('room.index') }}" class="w3-bar-item w3-button">Salones</a>
+            <a href="{{ url_for('record.index') }}" class="w3-bar-item w3-button">Registros</a>
+            <a href="{{ url_for('roomLoan.index') }}" class="w3-bar-item w3-button">Préstamos de Salones</a>
+            <a href="{{ url_for('auth.index') }}" class="w3-bar-item w3-button">Usuarios</a>
+            <a href="{{ url_for('wachiman.index') }}" class="w3-bar-item w3-button">Celador</a>
+            <a href="{{ url_for('equipment.index') }}" class="w3-bar-item w3-button">Equipos</a>
+            <a href="{{ url_for('apprentice.index') }}" class="w3-bar-item w3-button">Aprendiz</a>
+        {% endif %}
+
+            <!-- Se muestra si es Instructor  -->
+        {% if current_user.is_authenticated and (current_user.rol == "Instructor") %}
+            <a href="{{ url_for('intructor.index') }}" class="w3-bar-item w3-button">Instructor</a>
+            <a href="{{ url_for('equipment.index') }}" class="w3-bar-item w3-button">Equipos</a>
+        {% endif %}
+
+            <!-- Se muestra si es Aprendiz -->
+        {% if current_user.is_authenticated and current_user.rol == "Aprendiz" %}
+            <a href="{{ url_for('apprentice.index') }}" class="w3-bar-item w3-button">Aprendiz</a>
+            <a href="{{ url_for('equipment.index') }}" class="w3-bar-item w3-button">Equipos</a>
+        {% endif %}
+
+<!-- Se muestra para Aprendiz, Instructor y Celador -->
+        {% if current_user.is_authenticated and current_user.rol in ["Aprendiz", "Instructor", "Celador"] %}
+            <a href="{{ url_for('auth.logout') }}" class="w3-bar-item w3-button">Cerrar sesión</a>
+        {% endif %}
+            
+            
+            
+            
+
+        </div>
+    </div>
+</div>
+
+<!-- Menú lateral para móviles -->
+<div id="mobileMenu" class="w3-sidebar w3-bar-block w3-card w3-animate-left" 
+     style="display:none; width:250px;">
+    <button onclick="w3_close()" 
+            class="w3-bar-item w3-button w3-large">Cerrar &times;</button>
+            <a href="{{ url_for('wachiman.index') }}" class="w3-bar-item w3-button">Celador</a>
+            <a href="{{ url_for('intructor.index') }}" class="w3-bar-item w3-button">Instructor</a>
+            <a href="{{ url_for('apprentice.index') }}" class="w3-bar-item w3-button">Aprendiz</a>
+            <a href="{{ url_for('equipment.index') }}" class="w3-bar-item w3-button">Equipos</a>
+            
+            <a href="{{ url_for('record.index') }}" class="w3-bar-item w3-button">Registros</a>
+            <a href="{{ url_for('roomLoan.index') }}" class="w3-bar-item w3-button">Prestamos de Salones</a>
+            <a href="{{ url_for('auth.logout') }}" class="w3-bar-item w3-button">Cerrar seccion</a>
+</div>
+</head>

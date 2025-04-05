@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <table class="w3-table-all w3-hoverable">
+        <h1>Lista de instrutores</h1>
+        
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Documento</th>
+            <th>Accion</th>
+        </tr>
+        {% for instructor in data %}
+            <tr class="w3-hover-blue">
+                <td>{{ instructor.idInstructor }}</td>
+                <td>{{ instructor.nameInstructor }}</td>
+                <td>{{ instructor.documentInstructor }}</td>
+                <td>
+                    <a href="{{ url_for('intructor.edit', id=instructor.idInstructor) }}">Editar</a>
+                    <a href="{{ url_for('intructor.delete', id=instructor.idInstructor) }}">Eliminar</a>
+                    <!-- Agrega aquí el enlace para eliminar -->
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    
+    <a href="{{ url_for('intructor.add') }}" class="btn btn-sm btn-succes">Agregar Instructor</a>
+    {% endblock %}
+</div>
+</body>
+</html>

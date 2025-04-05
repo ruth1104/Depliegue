@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Editar Préstamo</h1>
+<form action="{{ url_for('roomLoan.edit', id=roomLoan.idRoomLoan) }}" method="POST">
+    <div class="form-group">
+        <label for="date">Fecha de Entrega:</label>
+        <input type="datetime-local" name="date" id="date" class="form-control" 
+               value="{{ roomLoan.date.strftime('%Y-%m-%dT%H:%M') }}" required>
+    </div>
+
+    <div class="form-group">
+        <label for="returnDate">Fecha de Devolución:</label>
+        <input type="datetime-local" name="returnDate" id="returnDate" class="form-control"
+               value="{{ roomLoan.returnDate.strftime('%Y-%m-%dT%H:%M') }}" required>
+    </div>
+
+    <div class="form-group">
+        <label for="instructors">Instructor:</label>
+        <select name="instructorId" id="instructors" class="form-control" required>
+            {% for instructor in instructors %}
+                <option value="{{ instructor.idInstructor }}" 
+                        {% if instructor.idInstructor == roomLoan.instructorId %} selected {% endif %}>
+                    {{ instructor.nameInstructor }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="wachiman">Celador:</label>
+        <select name="wachimanId" id="wachiman" class="form-control" required>
+            {% for wachiman in wachiman %}
+                <option value="{{ wachiman.idWachiman }}" {% if wachiman.idWachiman == roomLoan.wachimanId %} selected {% endif %}>{{ wachiman.nameWachiman }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="room">Salón:</label>
+        <select name="roomId" id="room" class="form-control" required>
+            {% for room in rooms %}
+                <option value="{{ room.idRoom }}" 
+                        {% if room.idRoom == roomLoan.roomId %} selected {% endif %}>
+                    {{ room.nameRoom }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Actualizar Préstamo</button>
+</form>
+
+<a href="{{ url_for('roomLoan.index') }}" class="btn btn-secondary">Volver</a>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+    
+    <table class="w3-table-all w3-hoverable">
+        <h1>Lista de Salones</h1>
+        <tr>
+            <th>ID</th>
+            <th>Nombre Salòn</th>
+            <th>Accion</th>
+            
+        </tr>
+        {% for room in data %}
+            <tr class="w3-hover-blue">
+                <td>{{ room.idRoom }}</td>
+                <td>{{ room.nameRoom }}</td>
+                <td>
+                    <a href="{{ url_for('room.edit', id=room.idRoom) }}">Editar</a>
+                    <a href="{{ url_for('room.delete', id=room.idRoom) }}">Eliminar</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    <a href="{{ url_for('room.add') }}" class="btn btn-sm btn-succes">Agregar Salon</a>
+    {% endblock %}
+</body>
+</html>
