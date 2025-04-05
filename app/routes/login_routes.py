@@ -62,7 +62,7 @@ def add():
         db.session.add(new_user)
         db.session.commit()
         
-        return redirect(url_for('auth.index'))
+        return redirect(url_for('auth.list'))
     return render_template('login/add.html')
 
 @bp.route('/user/edit/<int:id>', methods=['GET', 'POST'])
