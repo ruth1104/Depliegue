@@ -16,6 +16,11 @@ bp = Blueprint('auth', __name__)
 @bp.route('/indexUser')
 def index():
     users = User.query.all()
+    return render_template('login/login.html', users=users)
+
+@bp.route('/indexUserList')
+def list():
+    users = User.query.all()
     return render_template('login/index.html', users=users)
 
 @bp.route("/", methods=["GET", "POST"])
