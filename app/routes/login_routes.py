@@ -58,7 +58,7 @@ def add():
         
         # Encriptar la contraseña
        # hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
-        new_user = User(username=username, password=password, rol=rol)
+        new_user = User(username=username, password=password)
         db.session.add(new_user)
         db.session.commit()
         
