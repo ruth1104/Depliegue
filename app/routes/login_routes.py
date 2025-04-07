@@ -16,11 +16,6 @@ bp = Blueprint('auth', __name__)
 @bp.route('/indexUser')
 def index():
     users = User.query.all()
-    return render_template('login/login.html', users=users)
-
-@bp.route('/indexUserList')
-def list():
-    users = User.query.all()
     return render_template('login/index.html', users=users)
 
 @bp.route("/", methods=["GET", "POST"])
@@ -56,13 +51,20 @@ def add():
         password = request.form['password']
         rol = request.form['rol']
         
-        # Encriptar la contraseña
+        existing_user = User.query.filter_by(username=username).first()
+        if existing_user:
+            flash('El nombre de usuario ya está registrado', 'error')
+            return redirect(url_for('auth.add'))
+        
        # hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
         new_user = User(username=username, password=password)
         db.session.add(new_user)
         db.session.commit()
         
-        return redirect(url_for('auth.login'))
+        user = User.query.filter_by(username=username).first()
+        
+        
+        return render_template('login/login.html')
     return render_template('login/add.html')
 
 @bp.route('/user/edit/<int:id>', methods=['GET', 'POST'])
