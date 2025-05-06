@@ -1,14 +1,20 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, jsonify, request, redirect, url_for, flash
 from app.models.apprentice import Apprentices
 from app.models.equipment import Equipments
 from app.models.wachiman import Wachiman
 from app.models.record import Records
 from app import db
+from flask_login import login_required
 from datetime import datetime
 import pytz
 
 
 bp = Blueprint('record', __name__)
+
+@bp.before_request
+@login_required
+def before_request():
+    pass
 
 @bp.route('/record')
 def index():
@@ -36,6 +42,7 @@ def add():
     equipment = Equipments.query.all()
     wachiman = Wachiman.query.all()
     return render_template('record/add.html', apprentices=apprentice, equipments=equipment, wachimanes=wachiman)
+    return redirect(url_for('record.add', success='1'))
 
 @bp.route('/record/edit/<int:id>', methods=['GET', 'POST'])
 def edit(id):
@@ -81,3 +88,49 @@ def salida(id):
     db.session.commit()
   
     return redirect(url_for('record.index'))
+
+
+
+@bp.route('/record/get_data_by_qr', methods=['GET'])
+def get_data_by_qr():
+    apprentice_id = request.args.get('apprenticeId')
+    equipment_id = request.args.get('equipmentId')
+    wachiman_id = request.args.get('wachimanId')
+    
+    record = Records.query.filter_by(apprentice_id=apprentice_id, equipment_id=equipment_id, wachiman_id=wachiman_id).all()
+
+    records_data = [{
+        'idRecords': record.idRecords,
+        'dataEntry': record.dataEntry,
+        'dataExit': record.dataExit,
+        'apprentice': {'nameApprentice': record.apprentice.nameApprentice},
+        'equipment': {'codeEquipment': record.equipment.codeEquipment},
+        'wachiman': {'nameWachiman': record.wachiman.nameWachiman}
+    } for record in records_data]
+      
+
+    return redirect('/addconqr')
+
+@bp.route('/record/addqr/<int:id>', methods=['GET'])
+def addconqr(id):
+    equipo = Equipments.query.get_or_404(id)
+    colombia_tz = pytz.timezone('America/Bogota')
+
+    apprenticeId = equipo.apprenticeId
+    wachimanId = '1'
+    equipmentId = equipo.idEquipment
+    dataEntry = datetime.now(colombia_tz)
+    dataExit = datetime.now(colombia_tz)
+
+    newRecord = Records(
+        apprenticeId=apprenticeId,
+        dataEntry=dataEntry,
+        wachimanId=wachimanId,
+        equipmentId=equipmentId,
+        dataExit=dataExit
+    )
+    db.session.add(newRecord)
+    db.session.commit()
+
+    return redirect(url_for('record.index'))
+    

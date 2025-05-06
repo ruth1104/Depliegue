@@ -3,12 +3,18 @@ from app.models.instrutor import Instructors
 from app.models.equipment import Equipments
 from app.models.wachiman import Wachiman
 from app.models.recordsIn import RecordsIn
+from flask_login import login_required
 from app import db
 from datetime import datetime
 import pytz
 
 
 bp = Blueprint('recordsIn', __name__)
+
+@bp.before_request
+@login_required
+def before_request():
+    pass
 
 @bp.route('/recordsIn')
 def index():
@@ -81,3 +87,46 @@ def salida(id):
     db.session.commit()
   
     return redirect(url_for('recordsIn.index'))
+
+@bp.route('/record/get_data_by_qr', methods=['GET'])
+def get_data_by_qr():
+    instructor_id = request.args.get('equipmentId')
+    equipment_id = request.args.get('equipmentId')
+    wachiman_id = request.args.get('wachimanId')
+    
+    record = RecordsIn.query.filter_by(instructor_id=instructor_id, equipment_id=equipment_id, wachiman_id=wachiman_id).all()
+
+    records_data = [{
+        'idRecords': record.idRecords,
+        'dataEntry': record.dataEntry,
+        'dataExit': record.dataExit,
+        'instructor': {'nameInstructor': record.instructor.nameInstructor},
+        'equipment': {'codeEquipment': record.equipment.codeEquipment},
+        'wachiman': {'nameWachiman': record.wachiman.nameWachiman}
+    } for record in records_data]
+      
+
+    return redirect('/addconqr')
+
+@bp.route('/record/addqr/<int:id>', methods=['GET'])
+def addconqr(id):
+    equipo = Equipments.query.get_or_404(id)
+    colombia_tz = pytz.timezone('America/Bogota')
+
+    instructorId = equipo.instructorId
+    wachimanId = '1'
+    equipmentId = equipo.idEquipment
+    dataEntry = datetime.now(colombia_tz)
+    dataExit = datetime.now(colombia_tz)
+
+    newRecord = RecordsIn(
+        instructorId=instructorId,
+        dataEntry=dataEntry,
+        wachimanId=wachimanId,
+        equipmentId=equipmentId,
+        dataExit=dataExit
+    )
+    db.session.add(newRecord)
+    db.session.commit()
+
+    return redirect(url_for('record.index'))

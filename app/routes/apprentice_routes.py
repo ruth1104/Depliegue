@@ -1,9 +1,15 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 from app.models.apprentice import Apprentices
+from flask_login import login_required
 from flask_login import current_user
 from app import db
 
 bp = Blueprint('apprentice', __name__)
+
+@bp.before_request
+@login_required
+def before_request():
+    pass
 
 @bp.route('/apprentice')
 def index():

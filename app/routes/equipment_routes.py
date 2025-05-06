@@ -1,14 +1,27 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, send_file
 from app.models.equipment import Equipments
 from app.models.apprentice import Apprentices
 from app.models.instrutor import Instructors
+from io import BytesIO
+from pyzbar.pyzbar import decode
+from PIL import Image
+import pytz
+
+import base64
+from flask_login import login_required
 from flask_login import current_user
 from app import db
 
 bp = Blueprint('equipment', __name__)
 
-@bp.route('/equipment')
+@bp.before_request
+@login_required
+def before_request():
+    pass
+
+@bp.route('/equipment/index')
 def index():
+    print("Entra a equpo")
     data = Equipments.query.all()   
     return render_template('equipment/index.html', data=data)
 
@@ -48,8 +61,18 @@ def edit(id):
 @bp.route('/equipment/delete/<int:id>')
 def delete(id):
    equipment = Equipments.query.get_or_404(id)
-   
    db.session.delete(equipment)
    db.session.commit()
    
    return redirect(url_for('equipment.index'))
+
+@bp.route('/qr/<int:id>')
+def generate_qr(id):
+    print("Entrando a la ruta de generación de QR para el usuario con ID:", id)
+    equipement = Equipments.query.get_or_404(id)
+    qr_code_base64 = equipement.generate_qr()
+    # Decodificar la imagen del QR desde base64
+    qr_code_img = base64.b64decode(qr_code_base64)
+    return send_file(BytesIO(qr_code_img), mimetype='image/png')
+
+

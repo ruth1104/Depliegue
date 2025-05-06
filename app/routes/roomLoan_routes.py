@@ -3,11 +3,17 @@ from app.models.roomLoan import RoomsLoans
 from app.models.instrutor import Instructors
 from app.models.room import Rooms
 from app.models.wachiman import Wachiman
+from flask_login import login_required
 from app import db
 from datetime import datetime
 import pytz
 
 bp = Blueprint('roomLoan', __name__)
+
+@bp.before_request
+@login_required
+def before_request():
+    pass
 
 @bp.route('/roomLoan')
 def index():

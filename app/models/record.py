@@ -11,8 +11,8 @@ class Records(db.Model):
    equipmentId = db.Column(db.Integer, db.ForeignKey('equipment.idEquipment'))
    
    
+   
    apprentice = db.relationship("Apprentices", back_populates="record")
    equipment = db.relationship("Equipments", back_populates="record")
    wachiman = db.relationship("Wachiman", back_populates="record")
-   
    

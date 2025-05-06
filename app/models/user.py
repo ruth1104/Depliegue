@@ -8,11 +8,12 @@ class User(db.Model, UserMixin):
     idUser = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(300), unique=True, nullable=False)
     password = db.Column(db.String(300), nullable=False)
-    rol = db.Column(db.String(300), nullable=True)  # "celador" "instructor" o "aprendiz"
+    rol = db.Column(db.String(300), nullable=True, default="Aprendiz") 
     
     apprentice = db.relationship("Apprentices", back_populates="user")
     instructor = db.relationship("Instructors", back_populates="user")
     wachiman = db.relationship("Wachiman", back_populates="user")
+   
 
     def get_id(self):
         return str(self.idUser)

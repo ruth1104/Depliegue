@@ -1,35 +1,98 @@
 {% extends "base.html" %}
+{% block estilo %}
+<style>
+    /* Subimos el z-index del modal */
+    .modal {
+      z-index: 1060 !important;
+    }
 
-    {% block content %}
-    <table  class="w3-table-all w3-hoverable">
-        <h1>Lista de Equipos</h1>
+    .modal-backdrop {
+      z-index: 1050 !important;
+    }
+
+    /* El menú no debe tener un z-index superior a 1050 */
+    nav.navbar {
+      z-index: 1030 !important;
+    }
+
+    .modal-backdrop.show {
+      opacity: 0 !important; /* completamente transparente */
+    }
+
+    .w3-top, .w3-bottom {
+      z-index: 1 !important;
+    }
+    .sticky-top {
+      top: 56px; /* Altura del menú fijo */
+      z-index: 1001; /* Debe estar por encima del contenido pero debajo del modal */
+  }
+</style>
+
+{% endblock %}
+{% block content %}
+
+<!-- Asegúrate de tener Bootstrap JS al final del body en base.html -->
+
+
+
+<div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
+  <h1 class="mb-4">Lista de Equipos</h1>
+  <table class="table table-striped table-bordered table-hover">
+      <thead class="table-dark">
         <tr>
             <th>ID</th>
             <th>Marca</th>
-            <th>Codigo</th>
+            <th>Código</th>
             <th>Accesorios</th>
             <th>Aprendiz</th>
             <th>Instructor</th>
-            <th>Accion</th>
-            
+            <th>Acción</th>
         </tr>
+    </thead>
+      <tbody>
         {% for equipment in data %}
-            <tr class="w3-hover-blue">
-                <td>{{ equipment.idEquipment }}</td>
-                <td>{{ equipment.brandEquipment }}</td>
-                <td>{{ equipment.codeEquipment }}</td>
-                <td>{{ equipment.accassoriesEquipment }}</td>
-                <td>{{ equipment.apprentice.nameApprentice}}</td>
-                <td>{{ equipment.instructor.nameInstructor}}</td>
-                <td>
-                    <a href="{{ url_for('equipment.edit', id=equipment.idEquipment) }}">Editar</a>
-                    <a href="{{ url_for('equipment.delete', id=equipment.idEquipment) }}">Eliminar</a>
-                    <!-- Agrega aquí el enlace para eliminar -->
-                </td>
-            </tr>
+          <tr>
+              <td>{{ equipment.idEquipment }}</td>
+              <td>{{ equipment.brandEquipment }}</td>
+              <td>{{ equipment.codeEquipment }}</td>
+              <td>{{ equipment.accassoriesEquipment }}</td>
+              <td>{{ equipment.apprentice.nameApprentice }}</td>
+              <td>{{ equipment.instructor.nameInstructor }}</td>
+              <td>
+                  <a href="{{ url_for('equipment.edit', id=equipment.idEquipment) }}" class="btn btn-sm btn-primary">Editar</a>
+                  <a href="{{ url_for('equipment.delete', id=equipment.idEquipment) }}" class="btn btn-sm btn-danger">Eliminar</a>
+                  
+                  <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#qrModal{{ equipment.idEquipment }}">
+                      Ver QR
+                  </button>
+                  <a href="#" class="btn btn-sm btn-success mb-1" data-bs-toggle="modal" data-bs-target="#qrReaderModal">
+                    <i class="bi bi-qr-code-scan"></i> Usar Lector de QR
+                </a>
+              </td>
+          </tr>
+
+          <!-- Modal para QR -->
+          <div class="qr-modal-container">
+            <div class="modal fade" id="qrModal{{ equipment.idEquipment }}" tabindex="-1" aria-labelledby="qrModalLabel{{ equipment.idEquipment }}" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="qrModalLabel{{ equipment.idEquipment }}">Código QR</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                  </div>
+                  <div class="modal-body text-center">
+                    <img src="{{ url_for('equipment.generate_qr', id=equipment.idEquipment) }}"
+                        alt="Código QR"
+                        class="qr-modal-img">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> 
         {% endfor %}
-    </table>
-    <a href="{{ url_for('equipment.add') }}" class="btn btn-sm btn-succes">Agregar Equipo</a>
-    {% endblock %}
-</body>
-</html>
+      </tbody>
+  </table>
+</div>
+<a href="{{ url_for('equipment.add') }}" class="btn btn-success">Agregar Equipo</a>
+
+{% endblock %}

@@ -1,4 +1,8 @@
 from app import create_app,db
+from app.models.user import User
+from flask_bcrypt import Bcrypt
+from flask_login import LoginManager
+
 import os
 
 app = create_app()

@@ -1,6 +1,6 @@
 {% extends "base.html" %} 
 {% block content %}
-<h1 class="display-4 mb-4">Resguistrar Equipo</h1>
+<h1 class="display-4 mb-4">Resgistrar Equipo</h1>
 
 <form action="{{ url_for('record.add') }}" method="POST" class="form-group p-4 border rounded shadow-sm">
 
@@ -50,11 +50,6 @@
         {% endfor %}
       </select>
     </div>
-
-   
-
-
-    
 
     <button type="submit" class="btn btn-primary rounded-pill">Agregar</button>
 </form>

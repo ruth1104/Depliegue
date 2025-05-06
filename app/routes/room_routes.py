@@ -1,8 +1,14 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 from app.models.room import Rooms
+from flask_login import login_required
 from app import db
 
 bp = Blueprint('room', __name__)
+
+@bp.before_request
+@login_required
+def before_request():
+    pass
 
 @bp.route('/room')
 def index():

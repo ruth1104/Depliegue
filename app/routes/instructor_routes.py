@@ -1,14 +1,19 @@
 from flask import Blueprint, render_template, request, redirect, url_for, current_app
 from app.models.instrutor import Instructors
-from flask_login import current_user
+from flask_login import login_required
 from app import db
 
 
 bp = Blueprint('intructor', __name__)
 
-@bp.route('/intructor')
+@bp.before_request
+@login_required
+def before_request():
+    pass
+
+@bp.route('/instructor/index')
 def index():
-    data = Instructors.query.all()   
+    data = Instructors.query.all()
     return render_template('instructor/index.html', data=data)
 
 @bp.route('/intructor/add', methods=['GET', 'POST'])
