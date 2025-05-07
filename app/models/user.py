@@ -10,6 +10,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(300), nullable=False)
     rol = db.Column(db.String(300), nullable=True, default="Aprendiz") 
     
+    record = db.relationship("Records", back_populates="user")
     apprentice = db.relationship("Apprentices", back_populates="user")
     instructor = db.relationship("Instructors", back_populates="user")
     wachiman = db.relationship("Wachiman", back_populates="user")

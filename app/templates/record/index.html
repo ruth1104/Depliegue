@@ -23,7 +23,7 @@
             <td>{{ record.dataExit }}</td>
             <td>{{ record.apprentice.nameApprentice }}</td>
             <td>{{ record.equipment.codeEquipment }}</td>
-            <td>{{ record.wachiman.nameWachiman }}</td>
+            <td>{{ record.user.username }}</td>
             <td>
                 <div class="d-flex justify-content-between">
                     <a href="{{ url_for('record.edit', id=record.idRecords) }}" class="btn btn-sm btn-primary">Editar</a>
@@ -64,23 +64,30 @@
 
 <script src="{{ url_for('static', filename='html5-qrcode.min.js') }}"></script>
 <script>
+    
     let html5QrcodeScanner;
+    let qrYaLeido = false;
 
     function onScanSuccess(decodedText, decodedResult) {
+        if (qrYaLeido) return; // Evita múltiples ejecuciones
+        qrYaLeido = true;
+    
+        html5QrcodeScanner.clear().then(() => {
+            console.log("Lector de QR detenido tras lectura exitosa.");
+        }).catch((error) => {
+            console.error("Error al detener el lector:", error);
+        });
+    
         try {
             const jsonObject = JSON.parse(decodedText);
-            // Llamar a la función AJAX para actualizar la tabla
-            //updateTableWithQRCodeData(jsonObject);
             const id = jsonObject.ID;
-            const name = jsonObject.Name;
-            console.log(id)
-
             window.location.href = `/record/addqr/${id}`;
         } catch (error) {
             console.error("Error al parsear el QR:", error);
             alert(`Error en el QR: ${decodedText}`);
         }
     }
+    
 
     function onScanFailure(error) {
         console.warn(`Error de escaneo: ${error}`);
@@ -124,7 +131,7 @@
                             <td>${record.dataExit}</td>
                             <td>${record.apprentice.nameApprentice}</td>
                             <td>${record.equipment.codeEquipment}</td>
-                            <td>${record.user.username}</td>
+                            <td>${recordsIn.user.username}</td>
                             <td>
                                 <div class="d-flex justify-content-between">
                                     <a href="/edit/${record.idRecords}" class="btn btn-sm btn-primary">Editar</a>

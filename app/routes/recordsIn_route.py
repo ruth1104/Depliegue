@@ -3,7 +3,8 @@ from app.models.instrutor import Instructors
 from app.models.equipment import Equipments
 from app.models.wachiman import Wachiman
 from app.models.recordsIn import RecordsIn
-from flask_login import login_required
+from app.models.user import User
+from flask_login import login_required,current_user
 from app import db
 from datetime import datetime
 import pytz
@@ -88,13 +89,13 @@ def salida(id):
   
     return redirect(url_for('recordsIn.index'))
 
-@bp.route('/record/get_data_by_qr', methods=['GET'])
+@bp.route('/recordsIn/get_data_by_qr', methods=['GET'])
 def get_data_by_qr():
     instructor_id = request.args.get('equipmentId')
     equipment_id = request.args.get('equipmentId')
-    wachiman_id = request.args.get('wachimanId')
+    user_id = request.args.get('current_user.idUser')
     
-    record = RecordsIn.query.filter_by(instructor_id=instructor_id, equipment_id=equipment_id, wachiman_id=wachiman_id).all()
+    record = RecordsIn.query.filter_by(instructor_id=instructor_id, equipment_id=equipment_id, user_id=user_id).all()
 
     records_data = [{
         'idRecords': record.idRecords,
@@ -102,19 +103,19 @@ def get_data_by_qr():
         'dataExit': record.dataExit,
         'instructor': {'nameInstructor': record.instructor.nameInstructor},
         'equipment': {'codeEquipment': record.equipment.codeEquipment},
-        'wachiman': {'nameWachiman': record.wachiman.nameWachiman}
+        'user': {'username': record.user.username}
     } for record in records_data]
       
 
     return redirect('/addconqr')
 
-@bp.route('/record/addqr/<int:id>', methods=['GET'])
+@bp.route('/recordsIn/addqr/<int:id>', methods=['GET'])
 def addconqr(id):
     equipo = Equipments.query.get_or_404(id)
     colombia_tz = pytz.timezone('America/Bogota')
 
     instructorId = equipo.instructorId
-    wachimanId = '1'
+    userId = current_user.idUser
     equipmentId = equipo.idEquipment
     dataEntry = datetime.now(colombia_tz)
     dataExit = datetime.now(colombia_tz)
@@ -122,11 +123,11 @@ def addconqr(id):
     newRecord = RecordsIn(
         instructorId=instructorId,
         dataEntry=dataEntry,
-        wachimanId=wachimanId,
+        userId=userId,
         equipmentId=equipmentId,
         dataExit=dataExit
     )
     db.session.add(newRecord)
     db.session.commit()
 
-    return redirect(url_for('record.index'))
+    return redirect(url_for('recordsIn.index'))

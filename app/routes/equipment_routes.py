@@ -3,13 +3,8 @@ from app.models.equipment import Equipments
 from app.models.apprentice import Apprentices
 from app.models.instrutor import Instructors
 from io import BytesIO
-from pyzbar.pyzbar import decode
-from PIL import Image
-import pytz
-
 import base64
 from flask_login import login_required
-from flask_login import current_user
 from app import db
 
 bp = Blueprint('equipment', __name__)

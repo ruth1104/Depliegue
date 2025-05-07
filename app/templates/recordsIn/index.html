@@ -75,7 +75,7 @@
           const name = jsonObject.Name;
           console.log(id)
 
-          window.location.href = `/record/addqr/${id}`;
+          window.location.href = `/recordsIn/addqr/${id}`;
       } catch (error) {
           console.error("Error al parsear el QR:", error);
           alert(`Error en el QR: ${decodedText}`);
@@ -105,7 +105,7 @@
   // Función AJAX para actualizar la tabla con los datos del QR
   function updateTableWithQRCodeData(qrData) {
       $.ajax({
-          url: "{{ url_for('record.get_data_by_qr') }}",  // Endpoint en Flask para manejar la solicitud
+          url: "{{ url_for('recordsIn.get_data_by_qr') }}",  // Endpoint en Flask para manejar la solicitud
           method: "GET",
           data: {
               instructorId: qrData.instructorId,
@@ -116,15 +116,15 @@
               // Limpiar la tabla
               $('#records-table tbody').empty();
               // Agregar las filas con los nuevos datos
-              response.records.forEach(function(record) {
+              response.records.forEach(function(recordsIn) {
                   let newRow = `
                       <tr>
-                          <td>${record.idRecords}</td>
-                          <td>${record.dataEntry}</td>
-                          <td>${record.dataExit}</td>
-                          <td>${record.instructor.nameInstructor}</td>
-                          <td>${record.equipment.codeEquipment}</td>
-                          <td>${record.user.username}</td>
+                          <td>${recordsIn.idRecords}</td>
+                          <td>${recordsIn.dataEntry}</td>
+                          <td>${recordsIn.dataExit}</td>
+                          <td>${recordsIn.instructor.nameInstructor}</td>
+                          <td>${recordsIn.equipment.codeEquipment}</td>
+                          <td>${recordsIn.user.username}</td>
                           <td>
                               <div class="d-flex justify-content-between">
                                   <a href="/edit/${record.idRecords}" class="btn btn-sm btn-primary">Editar</a>

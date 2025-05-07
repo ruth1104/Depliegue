@@ -3,8 +3,9 @@ from app.models.apprentice import Apprentices
 from app.models.equipment import Equipments
 from app.models.wachiman import Wachiman
 from app.models.record import Records
+from app.models.user import User
 from app import db
-from flask_login import login_required
+from flask_login import login_required, current_user
 from datetime import datetime
 import pytz
 
@@ -42,7 +43,7 @@ def add():
     equipment = Equipments.query.all()
     wachiman = Wachiman.query.all()
     return render_template('record/add.html', apprentices=apprentice, equipments=equipment, wachimanes=wachiman)
-    return redirect(url_for('record.add', success='1'))
+    
 
 @bp.route('/record/edit/<int:id>', methods=['GET', 'POST'])
 def edit(id):
@@ -95,9 +96,9 @@ def salida(id):
 def get_data_by_qr():
     apprentice_id = request.args.get('apprenticeId')
     equipment_id = request.args.get('equipmentId')
-    wachiman_id = request.args.get('wachimanId')
+    user_id = request.args.get('current_user.idUser')
     
-    record = Records.query.filter_by(apprentice_id=apprentice_id, equipment_id=equipment_id, wachiman_id=wachiman_id).all()
+    record = Records.query.filter_by(apprentice_id=apprentice_id, equipment_id=equipment_id,user_id=user_id).all()
 
     records_data = [{
         'idRecords': record.idRecords,
@@ -105,7 +106,7 @@ def get_data_by_qr():
         'dataExit': record.dataExit,
         'apprentice': {'nameApprentice': record.apprentice.nameApprentice},
         'equipment': {'codeEquipment': record.equipment.codeEquipment},
-        'wachiman': {'nameWachiman': record.wachiman.nameWachiman}
+        'user': {'username': record.user.username}
     } for record in records_data]
       
 
@@ -117,7 +118,7 @@ def addconqr(id):
     colombia_tz = pytz.timezone('America/Bogota')
 
     apprenticeId = equipo.apprenticeId
-    wachimanId = '1'
+    userId = current_user.idUser
     equipmentId = equipo.idEquipment
     dataEntry = datetime.now(colombia_tz)
     dataExit = datetime.now(colombia_tz)
@@ -125,7 +126,7 @@ def addconqr(id):
     newRecord = Records(
         apprenticeId=apprenticeId,
         dataEntry=dataEntry,
-        wachimanId=wachimanId,
+        userId=userId,
         equipmentId=equipmentId,
         dataExit=dataExit
     )

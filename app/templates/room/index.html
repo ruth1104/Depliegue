@@ -1,27 +1,50 @@
 {% extends "base.html" %}
 
 {% block content %}
-    
     <table class="w3-table-all w3-hoverable">
-        <h1>Lista de Salones</h1>
-        <tr>
-            <th>ID</th>
-            <th>Nombre Salòn</th>
-            <th>Accion</th>
-            
-        </tr>
-        {% for room in data %}
-            <tr class="w3-hover-blue">
-                <td>{{ room.idRoom }}</td>
-                <td>{{ room.nameRoom }}</td>
-                <td>
-                    <a href="{{ url_for('room.edit', id=room.idRoom) }}">Editar</a>
-                    <a href="{{ url_for('room.delete', id=room.idRoom) }}">Eliminar</a>
-                </td>
+        <tbody>
+            <h1>Lista de Salones</h1>
+            <tr>
+                <th>ID</th>
+                <th>Nombre Salòn</th>
+                <th>Accion</th>
+                
             </tr>
-        {% endfor %}
+            {% for room in data %}
+                <tr class="w3-hover-blue">
+                    <td>{{ room.idRoom }}</td>
+                    <td>{{ room.nameRoom }}</td>
+                    <td>
+                        <a href="{{ url_for('room.edit', id=room.idRoom) }}">Editar</a>
+                        <a href="{{ url_for('room.delete', id=room.idRoom) }}">Eliminar</a>
+                        <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#qrModal{{ room.idRoom }}">
+                            Ver QR
+                        </button>
+                    </td>
+                </tr>
+
+            <!-- Modal para QR -->
+            <div class="qr-modal-container">
+                <div class="modal fade" id="qrModal{{ room.idRoom }}" tabindex="-1" aria-labelledby="qrModalLabel{{ room.idRoom }}" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="qrModalLabel{{ room.idRoom }}">Código QR</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                            </div>
+                            <div class="modal-body text-center">
+                                <img src="{{ url_for('room.generate_qr', id=room.idRoom) }}"
+                                    alt="Código QR"
+                                    class="qr-modal-img">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+            {% endfor %}
+            <a href="{{ url_for('room.add') }}" class="btn btn-sm btn-succes">Agregar Salon</a>
+        </tbody>
     </table>
-    <a href="{{ url_for('room.add') }}" class="btn btn-sm btn-succes">Agregar Salon</a>
-    {% endblock %}
 </body>
 </html>
+{% endblock %}
