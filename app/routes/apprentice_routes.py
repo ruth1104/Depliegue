@@ -52,3 +52,4 @@ def delete(id):
    db.session.commit()
    
    return redirect(url_for('apprentice.index'))
+

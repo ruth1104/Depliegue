@@ -1,30 +1,39 @@
 {% extends "base.html" %}
 
-    {% block content %}
-    
-    <table class="w3-table-all w3-hoverable">
-        <h1>Lista de Aprendices</h1>
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Documento</th>
-            <th>Accion</th>
-            
-        </tr>
-        {% for apprentice in data %}
-            <tr class="w3-hover-blue" >
-                <td>{{ apprentice.idApprentice }}</td>
-                <td>{{ apprentice.nameApprentice }}</td>
-                <td>{{ apprentice.documentApprentice }}</td>
-                <td>
-                    <a href="{{ url_for('apprentice.edit', id=apprentice.idApprentice) }}">Editar</a>
-                    <a href="{{ url_for('apprentice.delete', id=apprentice.idApprentice) }}">Eliminar</a>
-                    <!-- Agrega aquí el enlace para eliminar -->
-                </td>
+{% block content %}
+  <!-- estilos… -->
+
+  <div class="container mt-5">
+    <!-- tarjeta y cabecera… -->
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered align-middle text-center table-hover">
+          <thead>…</thead>
+          <tbody>
+            {% for apprentice in data %}
+            <tr>
+              <td>{{ apprentice.idApprentice }}</td>
+              <td>{{ apprentice.nameApprentice }}</td>
+              <td>{{ apprentice.documentApprentice }}</td>
+              <td>
+                <a href="{{ url_for('apprentice.edit',   id=apprentice.idApprentice) }}" class="btn btn-outline-primary btn-sm me-1">Editar</a>
+                <a href="{{ url_for('apprentice.delete', id=apprentice.idApprentice) }}" class="btn btn-outline-danger btn-sm me-1">Eliminar</a>
+              </td>
             </tr>
-        {% endfor %}
-    </table>
-    <a href="{{ url_for('apprentice.add') }}" class="btn btn-sm btn-succes">Agregar Aprendiz</a>
-    {% endblock %}
-</body>
-</html>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Botón “Agregar Aprendiz”, solo si no eres Instructor -->
+      {% if current_user.rol != 'Instructor' %}
+      <div class="text-end mt-3">
+        <a href="{{ url_for('apprentice.add') }}" class="btn btn-verde-claro btn-sm">
+          Agregar Aprendiz
+        </a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

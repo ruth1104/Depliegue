@@ -1,15 +1,7 @@
-
-
-
 <!-- Menú Superior -->
 <div class="w3-top menu-fijo">
     <div class="w3-bar topbar w3-padding w3-card">
-        <!-- Logo -->
-        <a href="#" class="w3-bar-item w3-button w3-large"><i class="fa-solid fa-store"></i>Mi Sistema</a>
-
-        <!-- Imagen de perfil -->
-        <img src="{{ url_for('static', filename='img/foto.png') }}" class="profile-img w3-right w3-hide-small" alt="Perfil">
-
+        
         <!-- Botón hamburguesa -->
         <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium" onclick="w3_open()">
             <i class="fa fa-bars"></i>
@@ -19,24 +11,47 @@
         <div class="w3-right w3-hide-small">
             {% if current_user.is_authenticated %}
                 {% if current_user.rol == "Celador" %}
-                    <a href="{{ url_for('room.index') }}" class="w3-bar-item w3-button"><i class="fa-solid fa-door-open"></i>Salones</a>
-                    <a href="{{ url_for('record.index') }}" class="w3-bar-item w3-button"><i class="fa-solid fa-user-check"></i>Registros Aprendices</a>
-                    <a href="{{ url_for('recordsIn.index') }}" class="w3-bar-item w3-button"><i class="fa-solid fa-user-tie"></i>Registros Instructores</a>
-                    <a href="{{ url_for('roomLoan.index') }}" class="w3-bar-item w3-button"><i class="fa-solid fa-handshake"></i>Préstamos</a>
-                    <a href="{{ url_for('auth.index') }}" class="w3-bar-item w3-button"><i class="fa-solid fa-users-cog"></i>Usuarios</a>
-                    <a href="{{ url_for('wachiman.index') }}" class="w3-bar-item w3-button"><i class="fa-solid fa-shield-halved"></i>Celador</a>
-                    <a href="{{ url_for('equipment.index') }}" class="w3-bar-item w3-button"><i class="fa-solid fa-laptop"></i>Equipos</a>
-                    <a href="{{ url_for('intructor.index') }}" class="w3-bar-item w3-button"><i class="fa-solid fa-chalkboard-teacher"></i>Instructor</a>
-                    <a href="{{ url_for('apprentice.index') }}" class="w3-bar-item w3-button"><i class="fa-solid fa-user-graduate"></i>Aprendiz</a>
+
+                    <!-- Grupo: Salones y Equipos -->
+                    <div class="w3-dropdown-hover">
+                        <button class="w3-button"><i class="fa-solid fa-door-open"></i> Salones y Equipos ▾</button>
+                            <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                                <a href="{{ url_for('room.index') }}" class="w3-bar-item w3-button">Salones</a>
+                                <a href="{{ url_for('equipment.index') }}" class="w3-bar-item w3-button">Equipos</a>
+                            </div>
+                    </div>
+
+                    <!-- Grupo: Registros -->
+                    <div class="w3-dropdown-hover">
+                        <button class="w3-button"><i class="fa-solid fa-user-check"></i> Registros ▾</button>
+                        <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                            <a href="{{ url_for('record.index') }}" class="w3-bar-item w3-button">Registros Aprendices</a>
+                            <a href="{{ url_for('recordsIn.index') }}" class="w3-bar-item w3-button">Registros Instructores</a>
+                            <a href="{{ url_for('roomLoan.index') }}" class="w3-bar-item w3-button">Préstamos</a>
+                        </div>
+                    </div>
+
+                    <!-- Grupo: Administración -->
+                    <div class="w3-dropdown-hover">
+                        <button class="w3-button"><i class="fa-solid fa-users-cog"></i> Administración ▾</button>
+                        <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                            <a href="{{ url_for('auth.index') }}" class="w3-bar-item w3-button">Usuarios</a>
+                            <a href="{{ url_for('wachiman.index') }}" class="w3-bar-item w3-button">Celador</a>
+                            <a href="{{ url_for('intructor.index') }}" class="w3-bar-item w3-button">Instructor</a>
+                            <a href="{{ url_for('apprentice.index') }}" class="w3-bar-item w3-button">Aprendiz</a>
+                        </div>
+                    </div>
+
                 {% elif current_user.rol == "Instructor" %}
-                    <a href="{{ url_for('intructor.index') }}" class="w3-bar-item w3-button"><i class="fa-solid fa-chalkboard-teacher"></i>Instructor</a>
-                    <a href="{{ url_for('equipment.index') }}" class="w3-bar-item w3-button"><i class="fa-solid fa-laptop"></i>Equipos</a>
+                    <a href="{{ url_for('roomLoan.index') }}" class="w3-bar-item w3-button"><i class="fa-solid fa-handshake"></i> Préstamos</a>
+                    <a href="{{ url_for('intructor.index') }}" class="w3-bar-item w3-button"><i class="fa-solid fa-chalkboard-teacher"></i> Instructor</a>
+                    <a href="{{ url_for('equipment.index') }}" class="w3-bar-item w3-button"><i class="fa-solid fa-laptop"></i> Equipos</a>
                 {% elif current_user.rol == "Aprendiz" %}
-                    <a href="{{ url_for('apprentice.index') }}" class="w3-bar-item w3-button"><i class="fa-solid fa-user-graduate"></i>Aprendiz</a>
-                    <a href="{{ url_for('equipment.index') }}" class="w3-bar-item w3-button"><i class="fa-solid fa-laptop"></i>Equipos</a>
+                    <a href="{{ url_for('apprentice.index') }}" class="w3-bar-item w3-button"><i class="fa-solid fa-user-graduate"></i> Aprendiz</a>
+                    <a href="{{ url_for('equipment.index') }}" class="w3-bar-item w3-button"><i class="fa-solid fa-laptop"></i> Equipos</a>
                 {% endif %}
 
-                <a href="{{ url_for('auth.logout') }}" class="w3-bar-item w3-button w3-red"><i class="fa-solid fa-right-from-bracket"></i>Cerrar sesión</a>
+                <a href="{{ url_for('auth.logout') }}" class="w3-bar-item w3-button w3-red"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</a>
             {% endif %}
         </div>
     </div>
@@ -48,16 +63,39 @@
 
     {% if current_user.is_authenticated %}
         {% if current_user.rol == "Celador" %}
-            <a href="{{ url_for('room.index') }}" class="w3-bar-item w3-button">Salones</a>
-            <a href="{{ url_for('record.index') }}" class="w3-bar-item w3-button">Registros Aprendices</a>
-            <a href="{{ url_for('recordsIn.index') }}" class="w3-bar-item w3-button">Registros Instructores</a>
-            <a href="{{ url_for('roomLoan.index') }}" class="w3-bar-item w3-button">Préstamos</a>
-            <a href="{{ url_for('auth.index') }}" class="w3-bar-item w3-button">Usuarios</a>
-            <a href="{{ url_for('wachiman.index') }}" class="w3-bar-item w3-button">Celador</a>
-            <a href="{{ url_for('equipment.index') }}" class="w3-bar-item w3-button">Equipos</a>
-            <a href="{{ url_for('intructor.index') }}" class="w3-bar-item w3-button">Instructor</a>
-            <a href="{{ url_for('apprentice.index') }}" class="w3-bar-item w3-button">Aprendiz</a>
+
+            <!-- Desplegable Salones y Equipos -->
+            <button onclick="toggleDropdown('grupo1')" class="w3-button w3-block w3-left-align">Salones y Equipos ▾</button>
+            <div id="grupo1" class="w3-hide w3-bar-block">
+                <a href="{{ url_for('room.index') }}" class="w3-bar-item w3-button">Salones</a>
+                <a href="{{ url_for('equipment.index') }}" class="w3-bar-item w3-button">Equipos</a>
+            </div>
+            
+            <button onclick="toggleDropdown('grupo1')" class="w3-button w3-block w3-left-align">Salones y Equipos ▾</button>
+            <div id="grupo1" class="w3-hide w3-bar-block">
+                <a href="{{ url_for('room.index') }}" class="w3-bar-item w3-button">Salones</a>
+                <a href="{{ url_for('equipment.index') }}" class="w3-bar-item w3-button">Equipos</a>
+            </div>
+
+            <!-- Desplegable Registros -->
+            <button onclick="toggleDropdown('grupo2')" class="w3-button w3-block w3-left-align">Registros ▾</button>
+            <div id="grupo2" class="w3-hide w3-bar-block">
+                <a href="{{ url_for('record.index') }}" class="w3-bar-item w3-button">Registros Aprendices</a>
+                <a href="{{ url_for('recordsIn.index') }}" class="w3-bar-item w3-button">Registros Instructores</a>
+                <a href="{{ url_for('roomLoan.index') }}" class="w3-bar-item w3-button">Préstamos</a>
+            </div>
+
+            <!-- Desplegable Administración -->
+            <button onclick="toggleDropdown('grupo3')" class="w3-button w3-block w3-left-align">Administración ▾</button>
+            <div id="grupo3" class="w3-hide w3-bar-block">
+                <a href="{{ url_for('auth.index') }}" class="w3-bar-item w3-button">Usuarios</a>
+                <a href="{{ url_for('wachiman.index') }}" class="w3-bar-item w3-button">Celador</a>
+                <a href="{{ url_for('intructor.index') }}" class="w3-bar-item w3-button">Instructor</a>
+                <a href="{{ url_for('apprentice.index') }}" class="w3-bar-item w3-button">Aprendiz</a>
+            </div>
+
         {% elif current_user.rol == "Instructor" %}
+            <a href="{{ url_for('roomLoan.index') }}" class="w3-bar-item w3-button">Préstamos</a>
             <a href="{{ url_for('intructor.index') }}" class="w3-bar-item w3-button">Instructor</a>
             <a href="{{ url_for('equipment.index') }}" class="w3-bar-item w3-button">Equipos</a>
         {% elif current_user.rol == "Aprendiz" %}
@@ -68,7 +106,7 @@
     {% endif %}
 </div>
 
-<!-- Script para abrir/cerrar menú -->
+<!-- Scripts para abrir/cerrar menú lateral y desplegables -->
 <script>
     function w3_open() {
         document.getElementById("mobileMenu").style.display = "block";
@@ -76,5 +114,16 @@
 
     function w3_close() {
         document.getElementById("mobileMenu").style.display = "none";
+    }
+
+    function toggleDropdown(id) {
+        var x = document.getElementById(id);
+        if (x.classList.contains("w3-show")) {
+            x.classList.remove("w3-show");
+            x.classList.add("w3-hide");
+        } else {
+            x.classList.remove("w3-hide");
+            x.classList.add("w3-show");
+        }
     }
 </script>

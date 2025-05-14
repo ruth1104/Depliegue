@@ -10,7 +10,9 @@ class RoomsLoans(db.Model):
    instructorId = db.Column(db.Integer, db.ForeignKey('instructor.idInstructor'))
    wachimanId = db.Column(db.Integer, db.ForeignKey('wachiman.idWachiman'))
    roomId = db.Column(db.Integer, db.ForeignKey('room.idRoom'))
+   userId = db.Column(db.Integer, db.ForeignKey('user.idUser'))
    
+   user = db.relationship('User', back_populates='roomLoan')
    instructor = db.relationship("Instructors", back_populates="roomLoan")
    room = db.relationship("Rooms", back_populates="roomLoan")
    wachiman = db.relationship("Wachiman", back_populates="roomLoan")

@@ -1,58 +1,114 @@
 {% extends "base.html" %}
+
+{% block estilo %}
+<style>
+    .bg-verde-claro {
+        background-color: #6FC24A !important;
+    }
+
+    .btn-verde-claro {
+        background-color: #6FC24A;
+        border-color: #6FC24A;
+        color: white;
+    }
+
+    .btn-verde-claro:hover {
+        background-color: #5ca33f;
+        border-color: #5ca33f;
+    }
+
+    .border-verde-claro {
+        border-color: #6FC24A !important;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
+<div class="container mt-5">
+    <div class="card shadow rounded-4 border-verde-claro">
+        <div class="card-header bg-verde-claro text-white text-center rounded-top-4">
+            <h2 class="mb-0">Entrada y Salida de Equipos de Aprendices</h2>
+        </div>
+        <div class="card-body">
+            <div class="mb-3 d-flex justify-content-between">
+                <a href="{{ url_for('record.add') }}" class="btn btn-verde-claro btn-sm">
+                    <i class="bi bi-plus-circle"></i> Registrar Equipo
+                </a>
+                <a href="#" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#qrReaderModal">
+                    <i class="bi bi-qr-code-scan"></i> Usar Lector de QR
+                </a>
+                <a href="{{ url_for('record.generar_pdf_apr') }}" target="_blank" class="btn btn-verde-claro">Descargar PDF</a>
+            </div>
+            <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
+                <table class="table table-bordered table-hover text-center align-middle" id="records-table">
+                    <thead style="background-color: #E9F9E4;">
+                        <tr>
+                            <th>ID</th>
+                            <th>Fecha Entrada</th>
+                            <th>Fecha Salida</th>
+                            <th>Aprendiz</th>
+                            <th>Código de equipo</th>
+                            <th>Celador</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in data %}
+                        <tr>
+                            <td>{{ record.idRecords }}</td>
+                            <td>{{ record.dataEntry }}</td>
+                            <td>{{ record.dataExit }}</td>
+                            <td>
+                                <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#modal{{ record.id }}">
+                                    {{ record.apprentice.nameApprentice }}
+                                </button>
+                                <!-- Modal Aprendiz -->
+                                <div class="modal fade" id="modal{{ record.id }}" tabindex="-1" aria-labelledby="modalLabel{{ record.id }}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content rounded-3">
+                                            <div class="modal-header bg-verde-claro text-white">
+                                                <h5 class="modal-title" id="modalLabel{{ record.id }}">Información del Aprendiz</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                            </div>
+                                            <div class="modal-body text-start">
+                                                <p><strong>ID:</strong> {{ record.apprentice.idApprentice }}</p>
+                                                <p><strong>Nombre:</strong> {{ record.apprentice.nameApprentice }}</p>
+                                                <p><strong>Documento:</strong> {{ record.apprentice.documentApprentice }}</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>{{ record.equipment.codeEquipment }}</td>
+                            <td>{{ record.user.username }}</td>
+                            <td>
+                                <div class="d-flex flex-column gap-1">
+                                    <a href="{{ url_for('record.edit', id=record.idRecords) }}" class="btn btn-outline-primary btn-sm me-1">Editar</a>
+                                    <a href="{{ url_for('record.delete', id=record.idRecords) }}" class="btn btn-outline-danger btn-sm me-1">Eliminar</a>
+                                    <a href="{{ url_for('record.salida', id=record.idRecords) }}" class="btn btn-sm btn-success">Salida</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
-<h1>Entrada y Salida de Equipos de Aprendices</h1>
-
-<table class="w3-table-all w3-hoverable" id="records-table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Fecha Entrada</th>
-            <th>Fecha Salida</th>
-            <th>Aprendiz</th>
-            <th>Código de equipo</th>
-            <th>Celador</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for record in data %}
-        <tr>
-            <td>{{ record.idRecords }}</td>
-            <td>{{ record.dataEntry }}</td>
-            <td>{{ record.dataExit }}</td>
-            <td>{{ record.apprentice.nameApprentice }}</td>
-            <td>{{ record.equipment.codeEquipment }}</td>
-            <td>{{ record.user.username }}</td>
-            <td>
-                <div class="d-flex justify-content-between">
-                    <a href="{{ url_for('record.edit', id=record.idRecords) }}" class="btn btn-sm btn-primary">Editar</a>
-                    <a href="{{ url_for('record.delete', id=record.idRecords) }}" class="btn btn-sm btn-danger">Eliminar</a>
-                    <a href="{{ url_for('record.salida', id=record.idRecords) }}" class="btn btn-sm btn-blue">Salida</a>
-                </div>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-<a href="{{ url_for('record.add') }}" class="btn btn-primary">Registrar Equipo</a>
-
-<!-- Botón para abrir modal QR -->
-<a href="#" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#qrReaderModal">
-    <i class="bi bi-qr-code-scan"></i> Usar Lector de QR
-</a>
-
-<!-- Modal para lector de QR -->
+<!-- Modal QR -->
 <div class="modal fade" id="qrReaderModal" tabindex="-1" aria-labelledby="qrReaderModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
+        <div class="modal-content rounded-3">
+            <div class="modal-header bg-verde-claro text-white">
                 <h5 class="modal-title" id="qrReaderModalLabel">Lector de Código QR</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <div class="modal-body">
-                <!-- Lector de QR -->
                 <div id="reader" style="width: 100%;"></div>
             </div>
             <div class="modal-footer">
@@ -64,20 +120,13 @@
 
 <script src="{{ url_for('static', filename='html5-qrcode.min.js') }}"></script>
 <script>
-    
     let html5QrcodeScanner;
     let qrYaLeido = false;
 
     function onScanSuccess(decodedText, decodedResult) {
-        if (qrYaLeido) return; // Evita múltiples ejecuciones
+        if (qrYaLeido) return;
         qrYaLeido = true;
-    
-        html5QrcodeScanner.clear().then(() => {
-            console.log("Lector de QR detenido tras lectura exitosa.");
-        }).catch((error) => {
-            console.error("Error al detener el lector:", error);
-        });
-    
+
         try {
             const jsonObject = JSON.parse(decodedText);
             const id = jsonObject.ID;
@@ -87,7 +136,6 @@
             alert(`Error en el QR: ${decodedText}`);
         }
     }
-    
 
     function onScanFailure(error) {
         console.warn(`Error de escaneo: ${error}`);
@@ -103,52 +151,11 @@
         if (html5QrcodeScanner) {
             html5QrcodeScanner.clear().then(() => {
                 console.log("Lector de QR detenido.");
+                qrYaLeido = false;
             }).catch((error) => {
                 console.error("Error al detener el lector de QR:", error);
             });
         }
     });
-
-    // Función AJAX para actualizar la tabla con los datos del QR
-    function updateTableWithQRCodeData(qrData) {
-        $.ajax({
-            url: "{{ url_for('record.get_data_by_qr') }}",  // Endpoint en Flask para manejar la solicitud
-            method: "GET",
-            data: {
-                apprenticeId: qrData.apprenticeId,
-                equipmentId: qrData.equipmentId,
-                wachimanId: qrData.wachimanId
-            },
-            success: function(response) {
-                // Limpiar la tabla
-                $('#records-table tbody').empty();
-                // Agregar las filas con los nuevos datos
-                response.records.forEach(function(record) {
-                    let newRow = `
-                        <tr>
-                            <td>${record.idRecords}</td>
-                            <td>${record.dataEntry}</td>
-                            <td>${record.dataExit}</td>
-                            <td>${record.apprentice.nameApprentice}</td>
-                            <td>${record.equipment.codeEquipment}</td>
-                            <td>${recordsIn.user.username}</td>
-                            <td>
-                                <div class="d-flex justify-content-between">
-                                    <a href="/edit/${record.idRecords}" class="btn btn-sm btn-primary">Editar</a>
-                                    <a href="/delete/${record.idRecords}" class="btn btn-sm btn-danger">Eliminar</a>
-                                    <a href="/salida/${record.idRecords}" class="btn btn-sm btn-blue">Salida</a>
-                                </div>
-                            </td>
-                        </tr>
-                    `;
-                    $('#records-table tbody').append(newRow);
-                });
-            },
-            error: function(xhr, status, error) {
-                console.error("Error al actualizar la tabla:", error);
-            }
-        });
-    }
 </script>
-
 {% endblock %}
